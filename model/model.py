@@ -3,8 +3,8 @@ from database.DAO import DAO
 
 class Model:
     def __init__(self):
-        self._graph = nx.Graph()            # definizione di un grafo
-        self._nodes = DAO.getAllNodes()     # aggiunge i nodi
+        self._graph = nx.Graph()            # definizione di un grafo vuoto
+        self._nodes = DAO.getAllNodes()     # qui il programma va nel database e legge tutte le opere.
 
         # Un dizionario che associerà ad ogni chiave primaria l'oggetto artObject corrispondente
         self._idMapAO = {}
@@ -37,15 +37,15 @@ class Model:
 
     def buildGraph(self):
         # aggiunge tutti i nodi presenti nella lista self._nodes dentro il grafo NetworkX.
-        self._graph.add_nodes_from(self._nodes)
+        self._graph.add_nodes_from(self._nodes)     # qui ancora senza collegamenti
 
         # Un arco collega due oggetti se sono stati esposti contemporaneamente nella stessa exhibition
-        self.addEdgesV2()                             # aggiunge gli archi
+        self.addEdgesV2()                           # aggiunge gli archi
 
     # SISTEMA INEFFICIENTE, CI METTE MOLTO A STAMPARE
     def addEdges(self):
-        for u in self._nodes:               # ciclo su tutti i nodi
-            for v in self._nodes:               # ciclo su tutti i nodi
+        for u in self._nodes:               # ciclo su tutti i nodi del grafo
+            for v in self._nodes:               # ciclo su tutti i nodi del grafo
                 peso  = DAO.getEdgePeso(u, v)
                 if peso is not None:
                     self._graph.add_edge(u, v, weight = peso)
